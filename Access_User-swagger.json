@@ -1,0 +1,368 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Power BI Metadata (Workspaces, Reports, Users, Datasets, Datasources, Org-wide Links)",
+    "version": "1.0.0",
+    "description": "OpenAPI spec for calling selected Power BI REST API endpoints from Informatica IICS REST V2.\nCovers: groups, reports in group, admin report users, dataset details, dataset datasources, and org-wide shared links with continuationToken."
+  },
+  "servers": [
+    { "url": "https://api.powerbi.com/v1.0/myorg" }
+  ],
+  "security": [
+    { "oauth2_cc": [] }
+  ],
+  "paths": {
+    "/groups": {
+      "get": {
+        "operationId": "ListGroups",
+        "summary": "List workspaces (groups)",
+        "responses": {
+          "200": {
+            "description": "OK - returns list of groups",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ListGroupsResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "default": { "$ref": "#/components/responses/DefaultError" }
+        }
+      }
+    },
+
+    "/groups/{groupId}/reports": {
+      "get": {
+        "operationId": "ListReportsInGroup",
+        "summary": "List reports in a workspace",
+        "parameters": [
+          { "$ref": "#/components/parameters/GroupId" }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - returns list of reports",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ListReportsResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "default": { "$ref": "#/components/responses/DefaultError" }
+        }
+      }
+    },
+
+    "/admin/reports/{reportId}/users": {
+      "get": {
+        "operationId": "GetReportUsersAsAdmin",
+        "summary": "Get users who have access to a report (Admin API)",
+        "parameters": [
+          { "$ref": "#/components/parameters/ReportId" }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - returns user access list for report",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ListReportUsersResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "default": { "$ref": "#/components/responses/DefaultError" }
+        }
+      }
+    },
+
+    "/groups/{groupId}/datasets/{datasetId}": {
+      "get": {
+        "operationId": "GetDatasetInGroup",
+        "summary": "Get dataset details in a workspace",
+        "parameters": [
+          { "$ref": "#/components/parameters/GroupId" },
+          { "$ref": "#/components/parameters/DatasetId" }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - dataset details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Dataset" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "default": { "$ref": "#/components/responses/DefaultError" }
+        }
+      }
+    },
+
+    "/groups/{groupId}/datasets/{datasetId}/datasources": {
+      "get": {
+        "operationId": "ListDatasourcesForDataset",
+        "summary": "List datasources for a dataset in a workspace",
+        "parameters": [
+          { "$ref": "#/components/parameters/GroupId" },
+          { "$ref": "#/components/parameters/DatasetId" }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - returns list of datasources",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ListDatasourcesResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "default": { "$ref": "#/components/responses/DefaultError" }
+        }
+      }
+    },
+
+    "/admin/widelySharedArtifacts/linksSharedToWholeOrganization": {
+      "get": {
+        "operationId": "ListLinksSharedToWholeOrganization",
+        "summary": "List org-wide shared links (Admin API) with continuationToken",
+        "parameters": [
+          {
+            "name": "continuationToken",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string", "nullable": true },
+            "description": "Token returned by previous call; omit or null for first page."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - returns array of artifact access entities and continuationToken",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ListOrgWideLinksResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "default": { "$ref": "#/components/responses/DefaultError" }
+        }
+      }
+    }
+  },
+
+  "components": {
+    "securitySchemes": {
+      "oauth2_cc": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://login.microsoftonline.com/YOUR_TENANT_ID/oauth2/v2.0/token",
+            "scopes": {
+              "https://analysis.windows.net/powerbi/api/.default": "Power BI Service default application permissions"
+            }
+          }
+        }
+      }
+    },
+
+    "parameters": {
+      "GroupId": {
+        "name": "groupId",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" },
+        "description": "Workspace (group) ID"
+      },
+      "ReportId": {
+        "name": "reportId",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" },
+        "description": "Report ID"
+      },
+      "DatasetId": {
+        "name": "datasetId",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" },
+        "description": "Dataset ID"
+      }
+    },
+
+    "responses": {
+      "Unauthorized": {
+        "description": "Unauthorized (missing/invalid token)",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+          }
+        }
+      },
+      "Forbidden": {
+        "description": "Forbidden (insufficient permissions or admin settings)",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+          }
+        }
+      },
+      "TooManyRequests": {
+        "description": "Throttled - too many requests (HTTP 429). Use backoff with Retry-After.",
+        "headers": {
+          "Retry-After": {
+            "description": "Number of seconds to wait before retrying",
+            "schema": { "type": "integer" }
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+          }
+        }
+      },
+      "DefaultError": {
+        "description": "Unexpected error",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+          }
+        }
+      }
+    },
+
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": { "type": "string" },
+              "message": { "type": "string" }
+            }
+          }
+        }
+      },
+
+      "ListGroupsResponse": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Group" }
+          }
+        }
+      },
+      "Group": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "isOnDedicatedCapacity": { "type": "boolean" }
+        }
+      },
+
+      "ListReportsResponse": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Report" }
+          }
+        }
+      },
+      "Report": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "datasetId": { "type": "string" },
+          "webUrl": { "type": "string" }
+        }
+      },
+
+      "ListReportUsersResponse": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ReportUser" }
+          }
+        }
+      },
+      "ReportUser": {
+        "type": "object",
+        "properties": {
+          "reportUserAccessRight": { "type": "string" },
+          "emailAddress": { "type": "string" },
+          "displayName": { "type": "string" },
+          "identifier": { "type": "string" },
+          "graphId": { "type": "string" },
+          "principalType": { "type": "string" },
+          "userType": { "type": "string" }
+        }
+      },
+
+      "Dataset": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+
+      "ListDatasourcesResponse": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Datasource" }
+          }
+        }
+      },
+      "Datasource": {
+        "type": "object",
+        "properties": {
+          "datasourceId": { "type": "string" },
+          "datasourceType": { "type": "string" },
+          "connectionDetails": { "type": "object" },
+          "displayName": { "type": "string" }
+        }
+      },
+
+      "ListOrgWideLinksResponse": {
+        "type": "object",
+        "properties": {
+          "ArtifactAccessEntities": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ArtifactAccessEntity" }
+          },
+          "continuationToken": { "type": "string", "nullable": true }
+        }
+      },
+      "ArtifactAccessEntity": {
+        "type": "object",
+        "properties": {
+          "artifactId": { "type": "string" },
+          "displayName": { "type": "string" },
+          "artifactType": { "type": "string" },
+          "accessRight": { "type": "string" },
+          "shareType": { "type": "string" },
+          "sharer": { "type": "object" }
+        }
+      }
+    }
+  }
+}
