@@ -353,16 +353,26 @@
         }
       },
       "ArtifactAccessEntity": {
-        "type": "object",
-        "properties": {
-          "artifactId": { "type": "string" },
-          "displayName": { "type": "string" },
-          "artifactType": { "type": "string" },
-          "accessRight": { "type": "string" },
-          "shareType": { "type": "string" },
-          "sharer": { "type": "object" }
-        }
+  "type": "object",
+  "properties": {
+    "artifactId": { "type": "string" },
+    "displayName": { "type": "string" },
+    "artifactType": { "type": "string" },
+    "accessRight": { "type": "string" },
+    "shareType": { "type": "string" },
+    "sharer": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "emailAddress": { "type": "string" },
+        "displayName":  { "type": "string" },
+        "identifier":   { "type": "string" },
+        "graphId":      { "type": "string" },
+        "principalType":{ "type": "string" }
       }
     }
   }
 }
+  }
+}
+
