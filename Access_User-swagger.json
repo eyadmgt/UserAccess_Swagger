@@ -183,7 +183,10 @@
           "additionalProperties": true,
           "properties": {
             "server": { "type": "string" },
-            "database": { "type": "string" }
+            "database": { "type": "string" },
+            "path": { "type": "string" },
+            "kind": { "type": "string" },
+            "url": { "type": "string" }
           }
         }
       }
@@ -221,3 +224,4 @@
     }
   }
 }
+
