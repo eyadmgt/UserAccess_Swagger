@@ -90,7 +90,7 @@
         "summary": "Get refresh history for a dataset in a workspace",
         "parameters": [
           { "name": "groupId", "in": "path", "required": true, "type": "string" },
-          { "name": "datasetId", "in": "path", "required": true, "type": "string" },
+          { "name": "datasetId", "in": "path", "required": true, "type": "string" }
         ],
         "produces": [ "application/json" ],
         "responses": {
@@ -273,6 +273,7 @@
     }
   }
 }
+
 
 
 
