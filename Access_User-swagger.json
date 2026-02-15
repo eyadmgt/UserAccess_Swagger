@@ -84,6 +84,21 @@
         }
       }
     },
+    "/groups/{groupId}/datasets/{datasetId}/refreshes": {
+      "get": {
+        "operationId": "GetDatasetRefreshHistoryInGroup",
+        "summary": "Get refresh history for a dataset in a workspace",
+        "parameters": [
+          { "name": "groupId", "in": "path", "required": true, "type": "string" },
+          { "name": "datasetId", "in": "path", "required": true, "type": "string" },
+          { "name": "$top", "in": "query", "required": false, "type": "integer", "minimum": 1 }
+        ],
+        "produces": [ "application/json" ],
+        "responses": {
+          "200": { "description": "OK", "schema": { "$ref": "#/definitions/Refreshes" } }
+        }
+      }
+    },
     "/admin/widelySharedArtifacts/linksSharedToWholeOrganization": {
       "get": {
         "operationId": "ListLinksSharedToWholeOrganization",
@@ -191,6 +206,45 @@
         }
       }
     },
+    "Refreshes": {
+      "type": "object",
+      "properties": {
+        "@odata.context": { "type": "string" },
+        "value": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Refresh" }
+        }
+      }
+    },
+    "Refresh": {
+      "type": "object",
+      "properties": {
+        "refreshType": { "type": "string" },
+        "startTime": { "type": "string", "format": "date-time" },
+        "endTime": { "type": "string", "format": "date-time" },
+        "status": { "type": "string" },
+        "requestId": { "type": "string" },
+        "serviceExceptionJson": { "type": "string" },
+        "refreshAttempts": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/RefreshAttempt" }
+        }
+      }
+    },
+    "RefreshAttempt": {
+      "type": "object",
+      "properties": {
+        "attemptId": { "type": "integer" },
+        "startTime": { "type": "string", "format": "date-time" },
+        "endTime": { "type": "string", "format": "date-time" },
+        "type": { "type": "string" },
+        "serviceExceptionJson": { "type": "string" },
+        "executionMetrics": {
+          "type": "array",
+          "items": { "type": "object", "additionalProperties": true }
+        }
+      }
+    },
     "ListOrgWideLinksResponse": {
       "type": "object",
       "properties": {
@@ -224,4 +278,5 @@
     }
   }
 }
+
 
