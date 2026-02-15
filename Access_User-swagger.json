@@ -238,10 +238,7 @@
         "endTime": { "type": "string", "format": "date-time" },
         "type": { "type": "string" },
         "serviceExceptionJson": { "type": "string" },
-        "executionMetrics": {
-          "type": "array",
-          "items": { "type": "object", "additionalProperties": true }
-        }
+        "executionMetrics": { "type": "string" }
       }
     },
     "ListOrgWideLinksResponse": {
@@ -277,6 +274,7 @@
     }
   }
 }
+
 
 
 
