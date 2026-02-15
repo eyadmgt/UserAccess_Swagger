@@ -91,7 +91,6 @@
         "parameters": [
           { "name": "groupId", "in": "path", "required": true, "type": "string" },
           { "name": "datasetId", "in": "path", "required": true, "type": "string" },
-          { "name": "$top", "in": "query", "required": false, "type": "integer", "minimum": 1 }
         ],
         "produces": [ "application/json" ],
         "responses": {
@@ -274,6 +273,7 @@
     }
   }
 }
+
 
 
 
