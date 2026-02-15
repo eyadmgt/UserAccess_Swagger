@@ -209,7 +209,6 @@
     "Refreshes": {
       "type": "object",
       "properties": {
-        "@odata.context": { "type": "string" },
         "value": {
           "type": "array",
           "items": { "$ref": "#/definitions/Refresh" }
@@ -278,5 +277,6 @@
     }
   }
 }
+
 
 
